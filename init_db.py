@@ -63,6 +63,22 @@ def init_database():
                 'first_name': 'Анна',
                 'middle_name': 'Сергеевна',
                 'role': roles['user']
+            },
+            {
+                'login': 'sidorov',
+                'password': 'User123!',
+                'last_name': 'Сидоров',
+                'first_name': 'Алексей',
+                'middle_name': 'Дмитриевич',
+                'role': roles['user']
+            },
+            {
+                'login': 'kozlova',
+                'password': 'User123!',
+                'last_name': 'Козлова',
+                'first_name': 'Екатерина',
+                'middle_name': 'Андреевна',
+                'role': roles['user']
             }
         ]
         
@@ -82,7 +98,8 @@ def init_database():
         print("\nСоздание жанров...")
         genres_data = [
             'Фантастика', 'Детектив', 'Роман', 'Научная литература',
-            'Приключения', 'Фэнтези', 'Триллер', 'Историческая проза', 'Поэзия', 'Драма'
+            'Приключения', 'Фэнтези', 'Триллер', 'Историческая проза', 
+            'Поэзия', 'Драма', 'Классика', 'Научная фантастика', 'Киберпанк'
         ]
         
         genres = {}
@@ -94,7 +111,7 @@ def init_database():
         
         db.session.commit()
         
-        print("\nСоздание книг...")
+        print("\nСоздание книг (10 штук)...")
         books_data = [
             {
                 'title': 'Мастер и Маргарита',
@@ -103,7 +120,7 @@ def init_database():
                 'publisher': 'Художественная литература',
                 'author': 'Михаил Булгаков',
                 'pages': 480,
-                'genres': ['Роман', 'Драма']
+                'genres': ['Роман', 'Драма', 'Классика']
             },
             {
                 'title': '1984',
@@ -112,7 +129,7 @@ def init_database():
                 'publisher': 'АСТ',
                 'author': 'Джордж Оруэлл',
                 'pages': 328,
-                'genres': ['Фантастика', 'Драма']
+                'genres': ['Фантастика', 'Драма', 'Классика']
             },
             {
                 'title': 'Гарри Поттер и философский камень',
@@ -122,9 +139,74 @@ def init_database():
                 'author': 'Джоан Роулинг',
                 'pages': 350,
                 'genres': ['Фэнтези', 'Приключения']
+            },
+            # НОВЫЕ КНИГИ
+            {
+                'title': 'Преступление и наказание',
+                'description': 'Роман Фёдора Достоевского о студенте Родионе Раскольникове, который совершает убийство и сталкивается с муками совести.',
+                'year': 1866,
+                'publisher': 'Русский вестник',
+                'author': 'Фёдор Достоевский',
+                'pages': 672,
+                'genres': ['Роман', 'Драма', 'Классика']
+            },
+            {
+                'title': 'Война и мир',
+                'description': 'Эпопея Льва Толстого о жизни русского общества в эпоху наполеоновских войн.',
+                'year': 1869,
+                'publisher': 'Русский вестник',
+                'author': 'Лев Толстой',
+                'pages': 1300,
+                'genres': ['Роман', 'Историческая проза', 'Классика']
+            },
+            {
+                'title': 'Автостопом по Галактике',
+                'description': 'Юмористический научно-фантастический роман Дугласа Адамса о приключениях незадачливого англичанина Артура Дента.',
+                'year': 1979,
+                'publisher': 'Pan Books',
+                'author': 'Дуглас Адамс',
+                'pages': 216,
+                'genres': ['Фантастика', 'Научная фантастика', 'Юмор']
+            },
+            {
+                'title': 'Нейромант',
+                'description': 'Классический киберпанк-роман Уильяма Гибсона о хакере, которого нанимают для последнего взлома.',
+                'year': 1984,
+                'publisher': 'Ace Books',
+                'author': 'Уильям Гибсон',
+                'pages': 288,
+                'genres': ['Научная фантастика', 'Киберпанк']
+            },
+            {
+                'title': 'Убить пересмешника',
+                'description': 'Роман Харпер Ли о расовой несправедливости в американском юге глазами маленькой девочки.',
+                'year': 1960,
+                'publisher': 'J.B. Lippincott & Co.',
+                'author': 'Харпер Ли',
+                'pages': 336,
+                'genres': ['Драма', 'Классика']
+            },
+            {
+                'title': '451 градус по Фаренгейту',
+                'description': 'Роман-антиутопия Рэя Брэдбери о мире, где книги запрещены и сжигаются.',
+                'year': 1953,
+                'publisher': 'Ballantine Books',
+                'author': 'Рэй Брэдбери',
+                'pages': 256,
+                'genres': ['Научная фантастика', 'Драма']
+            },
+            {
+                'title': 'Три товарища',
+                'description': 'Роман Эриха Марии Ремарка о дружбе и любви в Германии между мировыми войнами.',
+                'year': 1936,
+                'publisher': 'Propyläen Verlag',
+                'author': 'Эрих Мария Ремарк',
+                'pages': 448,
+                'genres': ['Роман', 'Драма']
             }
         ]
         
+        books = []
         for book_data in books_data:
             genres_for_book = book_data.pop('genres')
             book = Book(**book_data)
@@ -132,11 +214,12 @@ def init_database():
                 if genre_name in genres:
                     book.genres.append(genres[genre_name])
             db.session.add(book)
+            books.append(book)
             print(f"Создана книга: {book_data['title']}")
         
         db.session.commit()
         
-        print("\n⭐ Создание статусов рецензий...")
+        print("\nСоздание статусов рецензий...")
         statuses_data = ['pending', 'approved', 'rejected']
         status_descriptions = {
             'pending': 'На рассмотрении',
@@ -155,18 +238,28 @@ def init_database():
         
         print("\nСоздание рецензий...")
         
-        #получаем пользователей
+        # получаем пользователей
         ivanov = User.query.filter_by(login='ivanov').first()
         petrova = User.query.filter_by(login='petrova').first()
+        sidorov = User.query.filter_by(login='sidorov').first()
+        kozlova = User.query.filter_by(login='kozlova').first()
         
-        #получаем статусы
+        # получаем статусы
         pending_status = ReviewStatus.query.filter_by(name='pending').first()
         approved_status = ReviewStatus.query.filter_by(name='approved').first()
+        rejected_status = ReviewStatus.query.filter_by(name='rejected').first()
         
-        #получаем книги
+        # получаем книги
         master_margarita = Book.query.filter_by(title='Мастер и Маргарита').first()
         book_1984 = Book.query.filter_by(title='1984').first()
         harry_potter = Book.query.filter_by(title='Гарри Поттер и философский камень').first()
+        crime_punishment = Book.query.filter_by(title='Преступление и наказание').first()
+        war_peace = Book.query.filter_by(title='Война и мир').first()
+        hitchhiker = Book.query.filter_by(title='Автостопом по Галактике').first()
+        neuromancer = Book.query.filter_by(title='Нейромант').first()
+        mockingbird = Book.query.filter_by(title='Убить пересмешника').first()
+        fahrenheit = Book.query.filter_by(title='451 градус по Фаренгейту').first()
+        comrades = Book.query.filter_by(title='Три товарища').first()
         
         reviews_data = [
             {
@@ -195,6 +288,69 @@ def init_database():
                 'user': petrova,
                 'rating': 5,
                 'text': 'Любимая книга с детства! Магия, дружба, приключения — всё, что нужно для отличного чтения.',
+                'status': approved_status
+            },
+            {
+                'book': crime_punishment,
+                'user': ivanov,
+                'rating': 5,
+                'text': 'Глубокий психологический роман. Достоевский мастерски показывает внутренние метания человека. Очень тяжело, но невероятно важно к прочтению.',
+                'status': approved_status
+            },
+            {
+                'book': crime_punishment,
+                'user': sidorov,
+                'rating': 4,
+                'text': 'Интересно, но местами слишком затянуто. Однако концовка впечатляет.',
+                'status': pending_status
+            },
+            {
+                'book': war_peace,
+                'user': petrova,
+                'rating': 5,
+                'text': 'Монументальное произведение! Толстой создал целую вселенную. Читала несколько месяцев, но оно того стоило.',
+                'status': approved_status
+            },
+            {
+                'book': hitchhiker,
+                'user': sidorov,
+                'rating': 5,
+                'text': 'Очень смешно! Лучшая юмористическая фантастика, которую я читал. 42 — ответ на всё!',
+                'status': approved_status
+            },
+            {
+                'book': neuromancer,
+                'user': kozlova,
+                'rating': 4,
+                'text': 'Классика киберпанка. Стиль Гибсона уникален, но сюжет местами сложноват для восприятия.',
+                'status': approved_status
+            },
+            {
+                'book': mockingbird,
+                'user': kozlova,
+                'rating': 5,
+                'text': 'Трогательная и мудрая книга о справедливости, доброте и взрослении. Аттикус Финч — один из лучших литературных героев.',
+                'status': approved_status
+            },
+            {
+                'book': fahrenheit,
+                'user': ivanov,
+                'rating': 5,
+                'text': 'Брэдбери гениален! Эта антиутопия пугает своей пророческой силой. Книги действительно важны.',
+                'status': pending_status
+            },
+            {
+                'book': comrades,
+                'user': petrova,
+                'rating': 4,
+                'text': 'Ремарк как всегда прекрасен. Грустная, но красивая история о дружбе и любви.',
+                'status': approved_status
+            },
+            {
+                'book': comrades,
+                'user': sidorov,
+                'rating': 5,
+                'text': 'Одна из лучших книг о настоящей мужской дружбе. Прочитал на одном дыхании.',
                 'status': approved_status
             }
         ]
@@ -231,6 +387,8 @@ def init_database():
         print(f"{'moderator':<12} | {'Moder123!':<12} | {'Модератор':<12}")
         print(f"{'ivanov':<12} | {'User123!':<12} | {'Пользователь':<12}")
         print(f"{'petrova':<12} | {'User123!':<12} | {'Пользователь':<12}")
+        print(f"{'sidorov':<12} | {'User123!':<12} | {'Пользователь':<12}")
+        print(f"{'kozlova':<12} | {'User123!':<12} | {'Пользователь':<12}")
         print("-" * 40)
 
 if __name__ == '__main__':
