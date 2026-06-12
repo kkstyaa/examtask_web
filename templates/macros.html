@@ -1,0 +1,79 @@
+{% macro book_form_fields(genres, form_data, errors, is_edit=false) %}
+<div class="mb-3">
+    <label for="title" class="form-label">Название <span class="text-danger">*</span></label>
+    <input type="text" class="form-control {% if errors.get('title') %}is-invalid{% endif %}" 
+           id="title" name="title" value="{{ form_data.title|default('') }}" required>
+    {% if errors.get('title') %}<div class="invalid-feedback">{{ errors.title }}</div>{% endif %}
+</div>
+
+<div class="mb-3">
+    <label for="author" class="form-label">Автор <span class="text-danger">*</span></label>
+    <input type="text" class="form-control {% if errors.get('author') %}is-invalid{% endif %}" 
+           id="author" name="author" value="{{ form_data.author|default('') }}" required>
+    {% if errors.get('author') %}<div class="invalid-feedback">{{ errors.author }}</div>{% endif %}
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label for="year" class="form-label">Год <span class="text-danger">*</span></label>
+            <input type="number" class="form-control {% if errors.get('year') %}is-invalid{% endif %}" 
+                   id="year" name="year" value="{{ form_data.year|default('') }}" required>
+            {% if errors.get('year') %}<div class="invalid-feedback">{{ errors.year }}</div>{% endif %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label for="pages" class="form-label">Страниц <span class="text-danger">*</span></label>
+            <input type="number" class="form-control {% if errors.get('pages') %}is-invalid{% endif %}" 
+                   id="pages" name="pages" value="{{ form_data.pages|default('') }}" required>
+            {% if errors.get('pages') %}<div class="invalid-feedback">{{ errors.pages }}</div>{% endif %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label for="publisher" class="form-label">Издательство <span class="text-danger">*</span></label>
+            <input type="text" class="form-control {% if errors.get('publisher') %}is-invalid{% endif %}" 
+                   id="publisher" name="publisher" value="{{ form_data.publisher|default('') }}" required>
+            {% if errors.get('publisher') %}<div class="invalid-feedback">{{ errors.publisher }}</div>{% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label for="genres" class="form-label">Жанры</label>
+    <select class="form-select" id="genres" name="genres" multiple size="5">
+        {% for genre in genres %}
+        <option value="{{ genre.id }}" 
+            {% if genre.id|string in form_data.genres|default([]) %}selected{% endif %}>
+            {{ genre.name }}
+        </option>
+        {% endfor %}
+    </select>
+    <small class="text-muted">Удерживайте Ctrl для выбора нескольких жанров</small>
+</div>
+
+<div class="mb-3">
+    <label for="description" class="form-label">Описание <span class="text-danger">*</span></label>
+    <textarea class="form-control {% if errors.get('description') %}is-invalid{% endif %}" 
+              id="description" name="description" rows="12" required>{{ form_data.description|default('') }}</textarea>
+    {% if errors.get('description') %}<div class="invalid-feedback">{{ errors.description }}</div>{% endif %}
+    <div class="alert alert-info mt-2 small">
+        <strong>Поддерживается формат Markdown:</strong><br>
+        <code>**жирный текст**</code> → <strong>жирный текст</strong><br>
+        <code>*курсив*</code> → <em>курсив</em><br>
+        <code># Заголовок 1</code><br>
+        <code>## Заголовок 2</code><br>
+        <code>- пункт списка</code> — маркированный список<br>
+        <code>1. пункт</code> — нумерованный список<br>
+        <code>```код```</code> — блок кода
+    </div>
+</div>
+
+{% if not is_edit %}
+<div class="mb-3">
+    <label for="cover" class="form-label">Обложка</label>
+    <input type="file" class="form-control" id="cover" name="cover" accept="image/*">
+</div>
+{% endif %}
+{% endmacro %}

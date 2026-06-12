@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <h1 class="my-4 text-center">Мои рецензии</h1>
+        
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>{{ review.book.title }}</strong>
+                    <span class="text-muted ms-3">Оценка: 
+                        {% for i in range(review.rating) %}⭐{% endfor %}
+                        {% for i in range(5 - review.rating) %}☆{% endfor %}
+                    </span>
+                    <span class="badge {% if review.status.name == 'pending' %}bg-warning{% elif review.status.name == 'approved' %}bg-success{% else %}bg-danger{% endif %} ms-3">
+                        {% if review.status.name == 'pending' %}На рассмотрении
+                        {% elif review.status.name == 'approved' %}Одобрена
+                        {% else %}Отклонена{% endif %}
+                    </span>
+                    <small class="text-muted float-end">{{ review.created_at.strftime('%d.%m.%Y') }}</small>
+                </div>
+                <div class="card-body">
+                    <a href="{{ url_for('books.view', book_id=review.book.id) }}">Перейти к книге</a>
+                    <div class="border-start ps-3 mt-2">
+                        {{ review.text|markdown|truncate(300)|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">Вы ещё не оставили ни одной рецензии.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
